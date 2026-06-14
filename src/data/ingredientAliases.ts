@@ -34,4 +34,13 @@ export const ingredientAliases: Record<
   cheese: "Cheese",
 
   butter: "Butter",
+
+  poha: "Poha",
+
+  rava: "Rava",
+
+  "moong dal":
+    "Moong Dal",
+
+  dal: "Moong Dal",
 };

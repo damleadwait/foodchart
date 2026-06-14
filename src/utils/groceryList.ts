@@ -19,14 +19,19 @@ const normalizeText = (
 ): string => {
   return value
     .trim()
-    .toLowerCase();
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 };
 
 const normalizeIngredient = (
   ingredient: string
-): string => {
+): string | null => {
   const normalized =
     normalizeText(ingredient);
+
+  if (!normalized) {
+    return null;
+  }
 
   return (
     ingredientAliases[
@@ -53,11 +58,20 @@ export const generateGroceryList =
             const normalizedDish =
               normalizeText(dish);
 
+            if (
+              !normalizedDish
+            ) {
+              return;
+            }
+
             const ingredients =
               recipeDatabase[
                 normalizedDish
               ];
 
+            /*
+             * Recipe match found
+             */
             if (
               ingredients &&
               ingredients.length > 0
@@ -66,20 +80,48 @@ export const generateGroceryList =
                 (
                   ingredient
                 ) => {
-                  groceries.add(
+                  const normalizedIngredient =
                     normalizeIngredient(
                       ingredient
-                    )
-                  );
+                    );
+
+                  if (
+                    normalizedIngredient
+                  ) {
+                    groceries.add(
+                      normalizedIngredient
+                    );
+                  }
                 }
               );
-            } else {
-              groceries.add(
-                normalizeIngredient(
-                  dish
-                )
-              );
+
+              return;
             }
+
+            /*
+             * Support comma-separated ingredients
+             */
+            const directIngredients =
+              dish.split(",");
+
+            directIngredients.forEach(
+              (
+                ingredient
+              ) => {
+                const normalizedIngredient =
+                  normalizeIngredient(
+                    ingredient
+                  );
+
+                if (
+                  normalizedIngredient
+                ) {
+                  groceries.add(
+                    normalizedIngredient
+                  );
+                }
+              }
+            );
           });
         }
       );
@@ -87,5 +129,11 @@ export const generateGroceryList =
 
     return Array.from(
       groceries
-    ).sort();
+    ).sort(
+      (
+        a,
+        b
+      ) =>
+        a.localeCompare(b)
+    );
   };

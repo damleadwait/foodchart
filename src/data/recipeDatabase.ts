@@ -2,7 +2,40 @@ export const recipeDatabase: Record<
   string,
   string[]
 > = {
+  upma: [
+    "Rava",
+    "Kanda",
+    "Limbu",
+  ],
+
+  "kakdi ghavan": [
+    "Rice Flour",
+    "Kakdi",
+  ],
+
+  dheerda: [
+    "Rice Flour",
+    "Kanda",
+  ],
+
+  "shevayi upma": [
+    "Shevayi",
+    "Kanda",
+    "Limbu",
+  ],
+
   "batata bhaji": [
+    "Batata",
+    "Kanda",
+  ],
+
+  "kobi bhaji": [
+    "Kobi",
+    "Kanda",
+  ],
+
+  "flower bhaji": [
+    "Flower",
     "Batata",
     "Kanda",
   ],
@@ -13,36 +46,61 @@ export const recipeDatabase: Record<
     "Shengdana",
   ],
 
-  "egg curry": [
-    "Egg",
-    "Kanda",
-    "Tomato",
-  ],
-
-  poha: [
-    "Poha",
-    "Kanda",
-    "Peanut",
-  ],
-
-  upma: [
-    "Rava",
-    "Kanda",
-  ],
-
-  omelette: [
-    "Egg",
-    "Kanda",
-  ],
-
   "paneer bhurji": [
     "Paneer",
     "Kanda",
     "Tomato",
   ],
 
-  khichdi: [
+  "paneer paratha": [
+    "Wheat Flour",
+    "Paneer",
+    "Kanda",
+    "Dahi",
+  ],
+
+  "dudhi paratha": [
+    "Wheat Flour",
+    "Dudhi",
+    "Dahi",
+  ],
+
+  thalipeeth: [
+    "Bhajani",
+    "Kanda",
+    "Dahi",
+  ],
+
+  "aloo paratha": [
+    "Wheat Flour",
+    "Batata",
+    "Dahi",
+  ],
+
+  "kobi paratha": [
+    "Wheat Flour",
+    "Kobi",
+    "Dahi",
+  ],
+
+  "tawa pulao": [
     "Rice",
-    "Moong Dal",
+    "Batata",
+    "Kanda",
+    "Tomato",
+    "Matar",
+    "Capsicum",
+  ],
+
+  "pav bhaji": [
+    "Pav",
+    "Batata",
+    "Kanda",
+    "Tomato",
+    "Matar",
+    "Flower",
+    "Capsicum",
+    "Butter",
+    "Limbu",
   ],
 };

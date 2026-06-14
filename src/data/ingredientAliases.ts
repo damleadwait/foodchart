@@ -12,12 +12,14 @@ export const ingredientAliases: Record<
   onion: "Onion",
 
   tomato: "Tomato",
+  tomatoes: "Tomato",
 
   dahi: "Curd",
   curd: "Curd",
 
   shengdana: "Peanut",
   peanut: "Peanut",
+  peanuts: "Peanut",
 
   egg: "Egg",
   eggs: "Egg",
@@ -28,6 +30,8 @@ export const ingredientAliases: Record<
 
   chapati: "Wheat Flour",
   roti: "Wheat Flour",
+  "wheat flour": "Wheat Flour",
+  atta: "Wheat Flour",
 
   milk: "Milk",
 
@@ -35,12 +39,41 @@ export const ingredientAliases: Record<
 
   butter: "Butter",
 
-  poha: "Poha",
+  pohe: "Pohe",
 
   rava: "Rava",
 
-  "moong dal":
-    "Moong Dal",
+  "rice flour": "Rice Flour",
 
+  shevayi: "Shevayi",
+  sevai: "Shevayi",
+  vermicelli: "Shevayi",
+
+  bhajani: "Bhajani",
+
+  kobi: "Cabbage",
+  cabbage: "Cabbage",
+
+  flower: "Cauliflower",
+  cauliflower: "Cauliflower",
+
+  dudhi: "Bottle Gourd",
+  "bottle gourd": "Bottle Gourd",
+  lauki: "Bottle Gourd",
+
+  matar: "Green Peas",
+  peas: "Green Peas",
+  "green peas": "Green Peas",
+
+  capsicum: "Capsicum",
+  pepper: "Capsicum",
+  "bell pepper": "Capsicum",
+
+  limbu: "Lemon",
+  lemon: "Lemon",
+
+  pav: "Pav",
+
+  "moong dal": "Moong Dal",
   dal: "Moong Dal",
 };

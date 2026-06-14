@@ -14,8 +14,15 @@ import type {
 
 import {
   loadMealPlan,
-  LOCAL_STORAGE_KEY,
 } from "./utils/mealPlan";
+
+import { db } from "./firebase";
+
+import {
+  doc,
+  onSnapshot,
+  setDoc,
+} from "firebase/firestore";
 
 function App() {
   const [mealPlan, setMealPlan] =
@@ -30,11 +37,41 @@ function App() {
   const [selectedMealType, setSelectedMealType] =
     useState<MealType>("Breakfast");
 
+  /*
+   * Listen for realtime updates
+   */
   useEffect(() => {
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY,
-      JSON.stringify(mealPlan)
+    const mealPlanRef = doc(
+      db,
+      "mealPlans",
+      "currentWeek"
     );
+
+    const unsubscribe = onSnapshot(
+      mealPlanRef,
+      (snapshot) => {
+        if (snapshot.exists()) {
+          setMealPlan(
+            snapshot.data() as MealPlan
+          );
+        }
+      }
+    );
+
+    return unsubscribe;
+  }, []);
+
+  /*
+   * Save changes to Firestore
+   */
+  useEffect(() => {
+    const mealPlanRef = doc(
+      db,
+      "mealPlans",
+      "currentWeek"
+    );
+
+    setDoc(mealPlanRef, mealPlan);
   }, [mealPlan]);
 
   const openModal = (

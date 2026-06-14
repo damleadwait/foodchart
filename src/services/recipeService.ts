@@ -29,20 +29,24 @@ export function subscribeToRecipes(
     recipesQuery,
     (snapshot) => {
       const recipes: Recipe[] =
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
+  snapshot.docs.map((doc) => ({
+    id: doc.id,
 
-          name: doc.data().name,
+    name: doc.data().name,
 
-          normalizedName:
-            doc.data()
-              .normalizedName,
+    normalizedName:
+      doc.data()
+        .normalizedName,
 
-          isArchived:
-            doc.data()
-              .isArchived ??
-            false,
-        }));
+    ingredients:
+      doc.data()
+        .ingredients ?? [],
+
+    isArchived:
+      doc.data()
+        .isArchived ??
+      false,
+  }));
 
       recipes.sort((a, b) =>
         a.name.localeCompare(b.name)

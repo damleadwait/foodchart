@@ -256,9 +256,10 @@ function App() {
     );
 
   const groceryList =
-    generateGroceryList(
-      mealPlan
-    );
+  generateGroceryList(
+    mealPlan,
+    recipes
+  );
 
   return (
     <div className="container">

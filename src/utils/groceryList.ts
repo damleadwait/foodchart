@@ -2,6 +2,10 @@ import type {
   MealPlan,
 } from "../types/mealPlan";
 
+import type {
+  Recipe,
+} from "../types/recipe";
+
 import {
   mealTypes,
 } from "../types/mealPlan";
@@ -9,10 +13,6 @@ import {
 import {
   ingredientAliases,
 } from "../data/ingredientAliases";
-
-import {
-  recipeDatabase,
-} from "../data/recipeDatabase";
 
 const normalizeText = (
   value: string
@@ -42,7 +42,8 @@ const normalizeIngredient = (
 
 export const generateGroceryList =
   (
-    mealPlan: MealPlan
+    mealPlan: MealPlan,
+    recipes: Recipe[]
   ): string[] => {
     const groceries =
       new Set<string>();
@@ -65,9 +66,11 @@ export const generateGroceryList =
             }
 
             const ingredients =
-              recipeDatabase[
-                normalizedDish
-              ];
+              recipes.find(
+                (recipe) =>
+                  recipe.normalizedName ===
+                  normalizedDish
+              )?.ingredients;
 
             /*
              * Recipe match found

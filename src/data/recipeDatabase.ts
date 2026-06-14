@@ -40,6 +40,14 @@ export const recipeDatabase: Record<
     "Kanda",
   ],
 
+  "gawar bhaji": [
+    "Gawar",
+  ],
+
+  "shravan ghevda bhaji": [
+    "Shravan Ghevda",
+  ],
+
   "kakdi koshimbir": [
     "Kakdi",
     "Dahi",
@@ -102,5 +110,31 @@ export const recipeDatabase: Record<
     "Capsicum",
     "Butter",
     "Limbu",
+  ],
+
+  chole: [
+    "Chole",
+    "Kanda",
+    "Tomato",
+  ],
+
+  "idli sambar": [
+    "Idli Batter",
+    "Toor Dal",
+    "Kanda",
+    "Tomato",
+  ],
+
+  dosa: [
+    "Dosa Batter",
+    "Toor Dal",
+    "Kanda",
+    "Tomato",
+    "Coconut",
+  ],
+
+  chat: [
+    "Puri",
+    "Safed Watana",
   ],
 };

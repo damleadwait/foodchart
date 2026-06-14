@@ -21,25 +21,16 @@ export const ingredientAliases: Record<
   peanut: "Peanut",
   peanuts: "Peanut",
 
-  egg: "Egg",
-  eggs: "Egg",
-
   paneer: "Paneer",
 
   rice: "Rice",
 
-  chapati: "Wheat Flour",
+  poli: "Wheat Flour",
   roti: "Wheat Flour",
-  "wheat flour": "Wheat Flour",
   atta: "Wheat Flour",
-
-  milk: "Milk",
-
-  cheese: "Cheese",
+  "wheat flour": "Wheat Flour",
 
   butter: "Butter",
-
-  pohe: "Pohe",
 
   rava: "Rava",
 
@@ -58,8 +49,8 @@ export const ingredientAliases: Record<
   cauliflower: "Cauliflower",
 
   dudhi: "Bottle Gourd",
-  "bottle gourd": "Bottle Gourd",
   lauki: "Bottle Gourd",
+  "bottle gourd": "Bottle Gourd",
 
   matar: "Green Peas",
   peas: "Green Peas",
@@ -74,6 +65,29 @@ export const ingredientAliases: Record<
 
   pav: "Pav",
 
-  "moong dal": "Moong Dal",
-  dal: "Moong Dal",
+  chole: "Chole",
+  chickpeas: "Chole",
+
+  gawar: "Cluster Beans",
+  "cluster beans": "Cluster Beans",
+
+  "shravan ghevda": "Shravan Ghevda",
+
+  "idli batter": "Idli Batter",
+
+  "dosa batter": "Dosa Batter",
+
+  "toor dal": "Toor Dal",
+  "tur dal": "Toor Dal",
+  "tuvar dal": "Toor Dal",
+
+  coconut: "Coconut",
+  naral: "Coconut",
+
+  puri: "Puri",
+  "ganesh bhel puri": "Puri",
+
+  "safed watana": "Safed Watana",
+  watana: "Safed Watana",
+  "white peas": "Safed Watana",
 };

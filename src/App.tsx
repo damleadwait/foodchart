@@ -477,24 +477,58 @@ function App() {
       {visibleRecipes.map(
         (recipe) => (
           <div
-            key={recipe.id}
-            className="recipe-item"
-          >
-            <span>
-              {recipe.name}
-            </span>
+  key={recipe.id}
+  className="recipe-item"
+>
+  <div className="recipe-header">
+    <span className="recipe-name">
+      {recipe.name}
+    </span>
 
-            <button
-              className="archive-button"
-              onClick={() =>
-                handleArchiveRecipe(
-                  recipe
-                )
+    <button
+      className="archive-button"
+      onClick={() =>
+        handleArchiveRecipe(
+          recipe
+        )
+      }
+    >
+      Archive
+    </button>
+  </div>
+
+  <div className="recipe-ingredients">
+    <strong>
+      Ingredients:
+    </strong>
+
+    {recipe.ingredients
+      .length === 0 ? (
+      <p>
+        No ingredients
+        added yet.
+      </p>
+    ) : (
+      <ul>
+        {recipe.ingredients.map(
+          (
+            ingredient
+          ) => (
+            <li
+              key={
+                ingredient
               }
             >
-              Archive
-            </button>
-          </div>
+              {
+                ingredient
+              }
+            </li>
+          )
+        )}
+      </ul>
+    )}
+  </div>
+</div>
         )
       )}
     </div>

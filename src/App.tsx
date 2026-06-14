@@ -18,6 +18,8 @@ import type {
   MealType,
 } from "./types/mealPlan";
 
+import type { Recipe } from "./types/recipe";
+
 import {
   createEmptyMealPlan,
   normalizeMealPlan,
@@ -33,11 +35,16 @@ import {
   setDoc,
 } from "firebase/firestore";
 
+import { subscribeToRecipes } from "./services/recipeService";
+
 function App() {
   const [mealPlan, setMealPlan] =
     useState<MealPlan>(
       createEmptyMealPlan()
     );
+
+  const [recipes, setRecipes] =
+    useState<Recipe[]>([]);
 
   const [isModalOpen, setIsModalOpen] =
     useState(false);
@@ -58,26 +65,38 @@ function App() {
       "currentWeek"
     );
 
-    const unsubscribe = onSnapshot(
-      mealPlanRef,
-      (snapshot) => {
-        if (snapshot.exists()) {
-          setMealPlan(
-            normalizeMealPlan(
-              snapshot.data() as MealPlan
-            )
-          );
-        } else {
-          setDoc(
-            mealPlanRef,
-            createEmptyMealPlan()
-          );
-        }
+    const unsubscribe =
+      onSnapshot(
+        mealPlanRef,
+        (snapshot) => {
+          if (
+            snapshot.exists()
+          ) {
+            setMealPlan(
+              normalizeMealPlan(
+                snapshot.data() as MealPlan
+              )
+            );
+          } else {
+            setDoc(
+              mealPlanRef,
+              createEmptyMealPlan()
+            );
+          }
 
-        hasLoadedFromFirestore.current =
-          true;
-      }
-    );
+          hasLoadedFromFirestore.current =
+            true;
+        }
+      );
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe =
+      subscribeToRecipes(
+        setRecipes
+      );
 
     return unsubscribe;
   }, []);
@@ -95,7 +114,10 @@ function App() {
       "currentWeek"
     );
 
-    setDoc(mealPlanRef, mealPlan);
+    setDoc(
+      mealPlanRef,
+      mealPlan
+    );
   }, [mealPlan]);
 
   const openModal = (
@@ -103,7 +125,9 @@ function App() {
     mealType: MealType
   ) => {
     setSelectedDay(day);
-    setSelectedMealType(mealType);
+    setSelectedMealType(
+      mealType
+    );
     setIsModalOpen(true);
   };
 
@@ -141,10 +165,11 @@ function App() {
       [day]: {
         ...prev[day],
 
-        [mealType]: prev[day][
-          mealType
-        ].filter(
-          (_, i) => i !== index
+        [mealType]: prev[
+          day
+        ][mealType].filter(
+          (_, i) =>
+            i !== index
         ),
       },
     }));
@@ -154,7 +179,8 @@ function App() {
     day: string
   ) => {
     const currentNotes =
-      mealPlan[day]?.notes ?? "";
+      mealPlan[day]
+        ?.notes ?? "";
 
     const updatedNotes =
       window.prompt(
@@ -174,7 +200,8 @@ function App() {
       [day]: {
         ...prev[day],
 
-        notes: updatedNotes,
+        notes:
+          updatedNotes,
       },
     }));
   };
@@ -188,18 +215,22 @@ function App() {
     <div className="container">
       <h1>FoodChart</h1>
 
-      <p>Weekly Meal Planner</p>
+      <p>
+        Weekly Meal Planner
+      </p>
 
       <table className="meal-table">
         <thead>
           <tr>
             <th>Day</th>
 
-            {mealTypes.map((meal) => (
-              <th key={meal}>
-                {meal}
-              </th>
-            ))}
+            {mealTypes.map(
+              (meal) => (
+                <th key={meal}>
+                  {meal}
+                </th>
+              )
+            )}
           </tr>
         </thead>
 
@@ -217,7 +248,9 @@ function App() {
                     {mealPlan[
                       day
                     ].notes
-                      .split("\n")
+                      .split(
+                        "\n"
+                      )
                       .map(
                         (
                           line,
@@ -243,30 +276,43 @@ function App() {
                     )
                   }
                 >
-                  {mealPlan[day]
-                    ?.notes
+                  {mealPlan[
+                    day
+                  ]?.notes
                     ? "Edit Notes"
                     : "+ Notes"}
                 </button>
               </td>
 
               {mealTypes.map(
-                (mealType) => (
-                  <td key={mealType}>
+                (
+                  mealType
+                ) => (
+                  <td
+                    key={
+                      mealType
+                    }
+                  >
                     <div className="meal-cell">
                       {mealPlan[
                         day
-                      ][mealType].map(
+                      ][
+                        mealType
+                      ].map(
                         (
                           meal,
                           index
                         ) => (
                           <div
-                            key={index}
+                            key={
+                              index
+                            }
                             className="meal-chip"
                           >
                             <span>
-                              {meal}
+                              {
+                                meal
+                              }
                             </span>
 
                             <button
@@ -313,8 +359,9 @@ function App() {
         {groceryList.length ===
         0 ? (
           <p>
-            Add meals to generate
-            your grocery list.
+            Add meals to
+            generate your
+            grocery list.
           </p>
         ) : (
           <>
@@ -354,13 +401,21 @@ function App() {
       </div>
 
       <MealModal
-        isOpen={isModalOpen}
-        day={selectedDay}
+        isOpen={
+          isModalOpen
+        }
+        day={
+          selectedDay
+        }
         mealType={
           selectedMealType
         }
-        onClose={closeModal}
-        onSave={handleSaveMeal}
+        onClose={
+          closeModal
+        }
+        onSave={
+          handleSaveMeal
+        }
       />
     </div>
   );

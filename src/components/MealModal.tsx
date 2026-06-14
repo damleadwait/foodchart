@@ -1,15 +1,8 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { Recipe } from "../types/recipe";
 
-import {
-  addRecipe,
-  findRecipeByName,
-} from "../services/recipeService";
+import { addRecipe, findRecipeByName } from "../services/recipeService";
 
 type MealModalProps = {
   isOpen: boolean;
@@ -17,9 +10,7 @@ type MealModalProps = {
   mealType: string;
   recipes: Recipe[];
   onClose: () => void;
-  onSave: (
-    mealName: string
-  ) => void;
+  onSave: (mealName: string) => void;
 };
 
 function MealModal({
@@ -30,11 +21,9 @@ function MealModal({
   onClose,
   onSave,
 }: MealModalProps) {
-  const [mealName, setMealName] =
-    useState("");
+  const [mealName, setMealName] = useState("");
 
-  const [isSaving, setIsSaving] =
-    useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -44,227 +33,137 @@ function MealModal({
     }
   }, [isOpen]);
 
-  const suggestions =
-    useMemo(() => {
-      const searchTerm =
-        mealName
-          .trim()
-          .toLowerCase();
+  const suggestions = useMemo(() => {
+    const searchTerm = mealName.trim().toLowerCase();
 
-      if (!searchTerm) {
-        return [];
-      }
+    if (!searchTerm) {
+      return [];
+    }
 
-      return recipes
-        .filter(
-          (recipe) =>
-            !recipe.isArchived
-        )
-        .filter((recipe) =>
-          recipe.normalizedName.includes(
-            searchTerm
-          )
-        )
-        .slice(0, 5);
-    }, [mealName, recipes]);
+    return recipes
+      .filter((recipe) => !recipe.isArchived)
+      .filter((recipe) => recipe.normalizedName.includes(searchTerm))
+      .slice(0, 5);
+  }, [mealName, recipes]);
 
   if (!isOpen) {
     return null;
   }
 
-  const handleSave =
-    async () => {
-      const trimmedMeal =
-        mealName.trim();
+  const handleSave = async () => {
+    const trimmedMeal = mealName.trim();
 
-      if (!trimmedMeal) {
-        return;
+    if (!trimmedMeal) {
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const existingRecipe = findRecipeByName(recipes, trimmedMeal);
+
+      let recipeName = trimmedMeal;
+
+      if (existingRecipe) {
+        recipeName = existingRecipe.name;
+      } else {
+        await addRecipe(trimmedMeal);
       }
 
-      setIsSaving(true);
+      onSave(recipeName);
 
-      try {
-        const existingRecipe =
-          findRecipeByName(
-            recipes,
-            trimmedMeal
-          );
+      onClose();
+    } catch (error) {
+      console.error(error);
 
-        let recipeName =
-          trimmedMeal;
+      alert("Failed to save recipe.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
-        if (
-          existingRecipe
-        ) {
-          recipeName =
-            existingRecipe.name;
-        } else {
-          await addRecipe(
-            trimmedMeal
-          );
-        }
-
-        onSave(recipeName);
-
-        onClose();
-      } catch (error) {
-        console.error(
-          error
-        );
-
-        alert(
-          "Failed to save recipe."
-        );
-      } finally {
-        setIsSaving(false);
-      }
-    };
-
-  const handleSelectRecipe =
-    (
-      recipe: Recipe
-    ) => {
-      setMealName(
-        recipe.name
-      );
-    };
+  const handleSelectRecipe = (recipe: Recipe) => {
+    setMealName(recipe.name);
+  };
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h2>
-          Add Meal
-        </h2>
+        <h2>Add Meal</h2>
 
         <p>
-          <strong>
-            {day}
-          </strong>{" "}
-          – {mealType}
+          <strong>{day}</strong> – {mealType}
         </p>
 
         <input
           type="text"
           placeholder="Search or create recipe"
           value={mealName}
-          onChange={(e) =>
-            setMealName(
-              e.target.value
-            )
-          }
+          onChange={(e) => setMealName(e.target.value)}
           autoFocus
         />
 
-        {suggestions.length >
-          0 && (
+        {suggestions.length > 0 && (
           <div
             style={{
-              border:
-                "1px solid #ccc",
+              border: "1px solid #ccc",
 
-              borderRadius:
-                "4px",
+              borderRadius: "4px",
 
-              marginTop:
-                "8px",
+              marginTop: "8px",
 
-              maxHeight:
-                "150px",
+              maxHeight: "150px",
 
-              overflowY:
-                "auto",
+              overflowY: "auto",
             }}
           >
-            {suggestions.map(
-              (
-                recipe
-              ) => (
-                <button
-                  key={
-                    recipe.id
-                  }
-                  type="button"
-                  style={{
-                    display:
-                      "block",
+            {suggestions.map((recipe) => (
+              <button
+                key={recipe.id}
+                type="button"
+                style={{
+                  display: "block",
 
-                    width:
-                      "100%",
+                  width: "100%",
 
-                    textAlign:
-                      "left",
+                  textAlign: "left",
 
-                    padding:
-                      "8px",
+                  padding: "8px",
 
-                    border:
-                      "none",
+                  border: "none",
 
-                    background:
-                      "white",
+                  background: "white",
 
-                    cursor:
-                      "pointer",
-                  }}
-                  onClick={() =>
-                    handleSelectRecipe(
-                      recipe
-                    )
-                  }
-                >
-                  {
-                    recipe.name
-                  }
-                </button>
-              )
-            )}
+                  cursor: "pointer",
+                }}
+                onClick={() => handleSelectRecipe(recipe)}
+              >
+                {recipe.name}
+              </button>
+            ))}
           </div>
         )}
 
         {mealName.trim() &&
-          findRecipeByName(
-            recipes,
-            mealName
-          ) ===
-            undefined && (
+          findRecipeByName(recipes, mealName) === undefined && (
             <p
               style={{
-                marginTop:
-                  "8px",
+                marginTop: "8px",
 
-                fontSize:
-                  "0.9rem",
+                fontSize: "0.9rem",
               }}
             >
-              New recipe
-              will be
-              created.
+              New recipe will be created.
             </p>
           )}
 
         <div className="modal-buttons">
-          <button
-            onClick={
-              onClose
-            }
-            disabled={
-              isSaving
-            }
-          >
+          <button onClick={onClose} disabled={isSaving}>
             Cancel
           </button>
 
-          <button
-            onClick={
-              handleSave
-            }
-            disabled={
-              isSaving
-            }
-          >
-            {isSaving
-              ? "Saving..."
-              : "Save"}
+          <button onClick={handleSave} disabled={isSaving}>
+            {isSaving ? "Saving..." : "Save"}
           </button>
         </div>
       </div>

@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
 import "./App.css";
+
 import MealModal from "./components/MealModal";
 
 import {
@@ -13,7 +19,7 @@ import type {
 } from "./types/mealPlan";
 
 import {
-  loadMealPlan,
+  createEmptyMealPlan,
 } from "./utils/mealPlan";
 
 import { db } from "./firebase";
@@ -26,7 +32,9 @@ import {
 
 function App() {
   const [mealPlan, setMealPlan] =
-    useState<MealPlan>(loadMealPlan);
+    useState<MealPlan>(
+      createEmptyMealPlan()
+    );
 
   const [isModalOpen, setIsModalOpen] =
     useState(false);
@@ -36,6 +44,9 @@ function App() {
 
   const [selectedMealType, setSelectedMealType] =
     useState<MealType>("Breakfast");
+
+  const hasLoadedFromFirestore =
+    useRef(false);
 
   /*
    * Listen for realtime updates
@@ -54,7 +65,15 @@ function App() {
           setMealPlan(
             snapshot.data() as MealPlan
           );
+        } else {
+          setDoc(
+            mealPlanRef,
+            createEmptyMealPlan()
+          );
         }
+
+        hasLoadedFromFirestore.current =
+          true;
       }
     );
 
@@ -65,6 +84,12 @@ function App() {
    * Save changes to Firestore
    */
   useEffect(() => {
+    if (
+      !hasLoadedFromFirestore.current
+    ) {
+      return;
+    }
+
     const mealPlanRef = doc(
       db,
       "mealPlans",
@@ -119,7 +144,9 @@ function App() {
 
         [mealType]: prev[day][
           mealType
-        ].filter((_, i) => i !== index),
+        ].filter(
+          (_, i) => i !== index
+        ),
       },
     }));
   };
@@ -136,7 +163,9 @@ function App() {
             <th>Day</th>
 
             {mealTypes.map((meal) => (
-              <th key={meal}>{meal}</th>
+              <th key={meal}>
+                {meal}
+              </th>
             ))}
           </tr>
         </thead>

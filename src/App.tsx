@@ -23,6 +23,8 @@ import {
   normalizeMealPlan,
 } from "./utils/mealPlan";
 
+import { generateGroceryList } from "./utils/groceryList";
+
 import { db } from "./firebase";
 
 import {
@@ -49,9 +51,6 @@ function App() {
   const hasLoadedFromFirestore =
     useRef(false);
 
-  /*
-   * Listen for realtime updates
-   */
   useEffect(() => {
     const mealPlanRef = doc(
       db,
@@ -83,9 +82,6 @@ function App() {
     return unsubscribe;
   }, []);
 
-  /*
-   * Save changes to Firestore
-   */
   useEffect(() => {
     if (
       !hasLoadedFromFirestore.current
@@ -182,6 +178,11 @@ function App() {
       },
     }));
   };
+
+  const groceryList =
+    generateGroceryList(
+      mealPlan
+    );
 
   return (
     <div className="container">
@@ -304,10 +305,60 @@ function App() {
         </tbody>
       </table>
 
+      <div className="grocery-section">
+        <h2>
+          🛒 Grocery List
+        </h2>
+
+        {groceryList.length ===
+        0 ? (
+          <p>
+            Add meals to generate
+            your grocery list.
+          </p>
+        ) : (
+          <>
+            <div className="grocery-grid">
+              {groceryList.map(
+                (
+                  ingredient
+                ) => (
+                  <label
+                    key={
+                      ingredient
+                    }
+                    className="grocery-item"
+                  >
+                    <input
+                      type="checkbox"
+                    />
+
+                    <span>
+                      {
+                        ingredient
+                      }
+                    </span>
+                  </label>
+                )
+              )}
+            </div>
+
+            <p className="grocery-note">
+              Grocery list is
+              generated from
+              this week's meal
+              plan.
+            </p>
+          </>
+        )}
+      </div>
+
       <MealModal
         isOpen={isModalOpen}
         day={selectedDay}
-        mealType={selectedMealType}
+        mealType={
+          selectedMealType
+        }
         onClose={closeModal}
         onSave={handleSaveMeal}
       />

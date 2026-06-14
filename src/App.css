@@ -1,6 +1,12 @@
 .container {
-  padding: 30px;
-  font-family: Arial, sans-serif;
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 24px;
+
+  font-family: Arial,
+    sans-serif;
 }
 
 h1 {
@@ -9,49 +15,117 @@ h1 {
 
 p {
   color: #666;
+
   margin-top: 0;
 }
 
 .meal-table {
   width: 100%;
+
   border-collapse: collapse;
+
   margin-top: 20px;
+
   background-color: white;
+
+  table-layout: fixed;
 }
 
 .meal-table th,
 .meal-table td {
   border: 1px solid #ddd;
+
   padding: 12px;
+
   vertical-align: top;
 }
 
 .meal-table th {
   background-color: #4caf50;
+
   color: white;
 }
 
+.meal-table th:first-child,
+.meal-table td:first-child {
+  width: 140px;
+}
+
 .day-cell {
-  font-weight: bold;
-  width: 120px;
+  vertical-align: top;
+}
+
+.day-name {
+  font-weight: 700;
+
+  margin-bottom: 8px;
+}
+
+.day-notes {
+  margin-bottom: 8px;
+
+  font-size: 0.85rem;
+
+  line-height: 1.4;
+
+  color: #555;
+
+  white-space: pre-wrap;
+
+  word-break: break-word;
+}
+
+.notes-button {
+  background-color: transparent;
+
+  border: 1px solid
+    #4caf50;
+
+  color: #4caf50;
+
+  border-radius: 4px;
+
+  padding: 4px 8px;
+
+  font-size: 0.75rem;
+
+  cursor: pointer;
+
+  transition: all 0.2s
+    ease;
+}
+
+.notes-button:hover {
+  background-color:
+    #4caf50;
+
+  color: white;
 }
 
 .meal-cell {
   display: flex;
+
   flex-direction: column;
+
   gap: 8px;
 }
 
 .meal-chip {
   display: flex;
-  justify-content: space-between;
+
+  justify-content:
+    space-between;
+
   align-items: center;
 
   padding: 8px 12px;
 
-  background-color: #e8f5e9;
+  background-color:
+    #e8f5e9;
 
   border-radius: 6px;
+
+  word-break: break-word;
 }
 
 .remove-button {
@@ -73,7 +147,8 @@ p {
 
   border-radius: 4px;
 
-  background-color: #4caf50;
+  background-color:
+    #4caf50;
 
   color: white;
 
@@ -89,11 +164,13 @@ p {
 
   inset: 0;
 
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color:
+    rgba(0, 0, 0, 0.5);
 
   display: flex;
 
-  justify-content: center;
+  justify-content:
+    center;
 
   align-items: center;
 }
@@ -123,7 +200,8 @@ p {
 .modal-buttons {
   display: flex;
 
-  justify-content: flex-end;
+  justify-content:
+    flex-end;
 
   gap: 10px;
 }
@@ -138,37 +216,57 @@ p {
   cursor: pointer;
 }
 
-.day-cell {
-  vertical-align: top;
-  min-width: 140px;
+.grocery-section {
+  margin-top: 32px;
+
+  padding: 24px;
+
+  border: 1px solid
+    #ddd;
+
+  border-radius: 8px;
+
+  background-color: white;
 }
 
-.day-name {
-  font-weight: 700;
-  margin-bottom: 8px;
+.grocery-section h2 {
+  margin-top: 0;
+
+  margin-bottom: 20px;
 }
 
-.day-notes {
-  margin-bottom: 8px;
-  font-size: 0.85rem;
-  line-height: 1.4;
-  color: #555;
-  white-space: pre-wrap;
-  word-break: break-word;
+.grocery-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(180px, 1fr)
+    );
+
+  gap: 12px 24px;
 }
 
-.notes-button {
-  background-color: transparent;
-  border: 1px solid #4caf50;
-  color: #4caf50;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 0.75rem;
+.grocery-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.notes-button:hover {
-  background-color: #4caf50;
-  color: white;
+.grocery-item input {
+  width: 18px;
+
+  height: 18px;
+}
+
+.grocery-note {
+  margin-top: 20px;
+
+  font-size: 0.9rem;
+
+  color: #666;
 }

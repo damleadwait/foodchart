@@ -349,14 +349,49 @@ p {
   margin-bottom: 8px;
 }
 
-.recipe-ingredients ul {
-  margin: 0;
+.ingredient-chips {
+  display: flex;
 
-  padding-left: 20px;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 8px;
 }
 
-.recipe-ingredients li {
-  margin-bottom: 6px;
+.ingredient-chip {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 6px 10px;
+
+  border-radius: 16px;
+
+  background-color:
+    #e8f5e9;
+}
+
+.ingredient-remove-button {
+  border: none;
+
+  background: none;
+
+  color: #666;
+
+  cursor: pointer;
+
+  font-size: 1rem;
+
+  padding: 0;
+
+  line-height: 1;
+}
+
+.ingredient-remove-button:hover {
+  color: #f44336;
 }
 
 .archive-button {

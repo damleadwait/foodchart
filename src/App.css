@@ -137,3 +137,38 @@ p {
 
   cursor: pointer;
 }
+
+.day-cell {
+  vertical-align: top;
+  min-width: 140px;
+}
+
+.day-name {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.day-notes {
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #555;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.notes-button {
+  background-color: transparent;
+  border: 1px solid #4caf50;
+  color: #4caf50;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notes-button:hover {
+  background-color: #4caf50;
+  color: white;
+}

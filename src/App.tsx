@@ -20,6 +20,7 @@ import type {
 
 import {
   createEmptyMealPlan,
+  normalizeMealPlan,
 } from "./utils/mealPlan";
 
 import { db } from "./firebase";
@@ -63,7 +64,9 @@ function App() {
       (snapshot) => {
         if (snapshot.exists()) {
           setMealPlan(
-            snapshot.data() as MealPlan
+            normalizeMealPlan(
+              snapshot.data() as MealPlan
+            )
           );
         } else {
           setDoc(
@@ -151,6 +154,35 @@ function App() {
     }));
   };
 
+  const handleEditNotes = (
+    day: string
+  ) => {
+    const currentNotes =
+      mealPlan[day]?.notes ?? "";
+
+    const updatedNotes =
+      window.prompt(
+        `Notes for ${day}\n\nExamples:\n16 Jun\n🎂 Dad's Birthday\n🚫 Anuja not available`,
+        currentNotes
+      );
+
+    if (
+      updatedNotes === null
+    ) {
+      return;
+    }
+
+    setMealPlan((prev) => ({
+      ...prev,
+
+      [day]: {
+        ...prev[day],
+
+        notes: updatedNotes,
+      },
+    }));
+  };
+
   return (
     <div className="container">
       <h1>FoodChart</h1>
@@ -174,7 +206,47 @@ function App() {
           {days.map((day) => (
             <tr key={day}>
               <td className="day-cell">
-                {day}
+                <div className="day-name">
+                  {day}
+                </div>
+
+                {mealPlan[day]
+                  ?.notes && (
+                  <div className="day-notes">
+                    {mealPlan[
+                      day
+                    ].notes
+                      .split("\n")
+                      .map(
+                        (
+                          line,
+                          index
+                        ) => (
+                          <div
+                            key={
+                              index
+                            }
+                          >
+                            {line}
+                          </div>
+                        )
+                      )}
+                  </div>
+                )}
+
+                <button
+                  className="notes-button"
+                  onClick={() =>
+                    handleEditNotes(
+                      day
+                    )
+                  }
+                >
+                  {mealPlan[day]
+                    ?.notes
+                    ? "Edit Notes"
+                    : "+ Notes"}
+                </button>
               </td>
 
               {mealTypes.map(

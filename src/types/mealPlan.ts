@@ -17,10 +17,13 @@ export const mealTypes = [
 export type MealType =
   (typeof mealTypes)[number];
 
+export type DayPlan = {
+  Breakfast: string[];
+  Lunch: string[];
+  Dinner: string[];
+  notes: string;
+};
+
 export type MealPlan = {
-  [day: string]: {
-    Breakfast: string[];
-    Lunch: string[];
-    Dinner: string[];
-  };
+  [day: string]: DayPlan;
 };

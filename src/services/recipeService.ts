@@ -12,105 +12,71 @@ import { db } from "../firebase";
 
 import type { Recipe } from "../types/recipe";
 
-const recipesCollection = collection(
-  db,
-  "recipes"
-);
+const recipesCollection = collection(db, "recipes");
 
-export function subscribeToRecipes(
-  callback: (
-    recipes: Recipe[]
-  ) => void
-) {
-  const recipesQuery =
-    query(recipesCollection);
+export function subscribeToRecipes(callback: (recipes: Recipe[]) => void) {
+  const recipesQuery = query(recipesCollection);
 
   return onSnapshot(
     recipesQuery,
     (snapshot) => {
-      const recipes: Recipe[] =
-  snapshot.docs.map((doc) => ({
-    id: doc.id,
+      const recipes: Recipe[] = snapshot.docs.map((doc) => ({
+        id: doc.id,
 
-    name: doc.data().name,
+        name: doc.data().name,
 
-    normalizedName:
-      doc.data()
-        .normalizedName,
+        normalizedName: doc.data().normalizedName,
 
-    ingredients:
-      doc.data()
-        .ingredients ?? [],
+        ingredients: doc.data().ingredients ?? [],
 
-    isArchived:
-      doc.data()
-        .isArchived ??
-      false,
-  }));
+        isArchived: doc.data().isArchived ?? false,
+      }));
 
-      recipes.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
+      recipes.sort((a, b) => a.name.localeCompare(b.name));
 
       callback(recipes);
     },
     (error) => {
-      console.error(
-        "Recipe subscription failed:",
-        error
-      );
-    }
+      console.error("Recipe subscription failed:", error);
+    },
   );
 }
 
-export async function addRecipe(
-  name: string
-) {
-  const normalizedName =
-    name.trim().toLowerCase();
+export async function addRecipe(name: string) {
+  const normalizedName = name.trim().toLowerCase();
 
-  return addDoc(
-    recipesCollection,
-    {
-      name: name.trim(),
+  return addDoc(recipesCollection, {
+    name: name.trim(),
 
-      normalizedName,
+    normalizedName,
 
-      isArchived: false,
+    isArchived: false,
 
-      createdAt:
-        serverTimestamp(),
-    }
-  );
+    createdAt: serverTimestamp(),
+  });
 }
 
-export async function archiveRecipe(
-  recipeId: string
-) {
-  const recipeRef = doc(
-    db,
-    "recipes",
-    recipeId
-  );
+export async function archiveRecipe(recipeId: string) {
+  const recipeRef = doc(db, "recipes", recipeId);
 
-  await updateDoc(
-    recipeRef,
-    {
-      isArchived: true,
-    }
-  );
+  await updateDoc(recipeRef, {
+    isArchived: true,
+  });
 }
 
-export function findRecipeByName(
-  recipes: Recipe[],
-  name: string
+export async function updateRecipeIngredients(
+  recipeId: string,
+  ingredients: string[],
 ) {
-  const normalizedName =
-    name.trim().toLowerCase();
+  const recipeRef = doc(db, "recipes", recipeId);
 
-  return recipes.find(
-    (recipe) =>
-      recipe.normalizedName ===
-      normalizedName
-  );
+  await updateDoc(recipeRef, {
+    ingredients,
+  });
+}
+
+export function findRecipeByName(recipes: Recipe[], name: string) {
+  const normalizedName = name.trim().toLowerCase();
+
+  return recipes.find((recipe) => recipe.normalizedName === normalizedName);
 }

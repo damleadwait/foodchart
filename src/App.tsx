@@ -18,7 +18,11 @@ import { db } from "./firebase";
 
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
 
-import { archiveRecipe, subscribeToRecipes } from "./services/recipeService";
+import {
+  archiveRecipe,
+  subscribeToRecipes,
+  updateRecipeIngredients,
+} from "./services/recipeService";
 
 function App() {
   const [mealPlan, setMealPlan] = useState<MealPlan>(createEmptyMealPlan());
@@ -27,6 +31,10 @@ function App() {
 
   const [editedIngredients, setEditedIngredients] = useState<
     Record<string, string[]>
+  >({});
+
+  const [ingredientInputs, setIngredientInputs] = useState<
+    Record<string, string>
   >({});
 
   const [recipeSearchTerm, setRecipeSearchTerm] = useState("");
@@ -89,6 +97,49 @@ function App() {
         (ingredient) => ingredient !== ingredientToRemove,
       ),
     }));
+  };
+
+  const handleAddIngredient = (recipe: Recipe) => {
+    const ingredient = ingredientInputs[recipe.id]?.trim();
+
+    if (!ingredient) {
+      return;
+    }
+    const ingredients = getIngredients(recipe);
+
+    setEditedIngredients((prev) => ({
+      ...prev,
+
+      [recipe.id]: [...ingredients, ingredient],
+    }));
+
+    setIngredientInputs((prev) => ({
+      ...prev,
+
+      [recipe.id]: "",
+    }));
+  };
+
+  const handleSaveIngredients = async (recipe: Recipe) => {
+    const ingredients = getIngredients(recipe);
+
+    try {
+      await updateRecipeIngredients(recipe.id, ingredients);
+
+      setEditedIngredients((prev) => {
+        const updated = {
+          ...prev,
+        };
+
+        delete updated[recipe.id];
+
+        return updated;
+      });
+    } catch (error) {
+      console.error("Failed to save ingredients:", error);
+
+      window.alert("Unable to save ingredients.");
+    }
   };
 
   const openModal = (day: string, mealType: MealType) => {
@@ -317,6 +368,40 @@ function App() {
                           </button>
                         </div>
                       ))}
+                    </div>
+                  )}
+                  <div className="ingredient-input-row">
+                    <input
+                      type="text"
+                      value={ingredientInputs[recipe.id] ?? ""}
+                      onChange={(event) =>
+                        setIngredientInputs((prev) => ({
+                          ...prev,
+
+                          [recipe.id]: event.target.value,
+                        }))
+                      }
+                      placeholder="New ingredient"
+                      className="ingredient-input"
+                    />
+
+                    <button
+                      type="button"
+                      className="add-ingredient-button"
+                      onClick={() => handleAddIngredient(recipe)}
+                    >
+                      Add
+                    </button>
+                  </div>
+                  {editedIngredients[recipe.id] && (
+                    <div className="ingredient-actions">
+                      <button
+                        type="button"
+                        className="save-ingredients-button"
+                        onClick={() => handleSaveIngredients(recipe)}
+                      >
+                        Save Ingredients
+                      </button>
                     </div>
                   )}
                 </div>

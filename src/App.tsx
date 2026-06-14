@@ -25,6 +25,8 @@ import {
 } from "./services/recipeService";
 
 function App() {
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+
   const [mealPlan, setMealPlan] = useState<MealPlan>(createEmptyMealPlan());
 
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -227,73 +229,82 @@ function App() {
 
   return (
     <div className="container">
-      <h1>FoodChart</h1>
+      <div className="app-header">
+        <div>
+          <h1>FoodChart</h1>
+          <p>Weekly Meal Planner</p>
+        </div>
+        <button className="about-button" onClick={() => setIsAboutOpen(true)}>
+          About
+        </button>
+      </div>
 
-      <p>Weekly Meal Planner</p>
+      <div className="table-wrapper">
+        <table className="meal-table">
+          <thead>
+            <tr>
+              <th>Day</th>
 
-      <table className="meal-table">
-        <thead>
-          <tr>
-            <th>Day</th>
-
-            {mealTypes.map((meal) => (
-              <th key={meal}>{meal}</th>
-            ))}
-          </tr>
-        </thead>
-
-        <tbody>
-          {days.map((day) => (
-            <tr key={day}>
-              <td className="day-cell">
-                <div className="day-name">{day}</div>
-
-                {mealPlan[day]?.notes && (
-                  <div className="day-notes">
-                    {mealPlan[day].notes.split("\n").map((line, index) => (
-                      <div key={index}>{line}</div>
-                    ))}
-                  </div>
-                )}
-
-                <button
-                  className="notes-button"
-                  onClick={() => handleEditNotes(day)}
-                >
-                  {mealPlan[day]?.notes ? "Edit Notes" : "+ Notes"}
-                </button>
-              </td>
-
-              {mealTypes.map((mealType) => (
-                <td key={mealType}>
-                  <div className="meal-cell">
-                    {mealPlan[day][mealType].map((meal, index) => (
-                      <div key={index} className="meal-chip">
-                        <span>{meal}</span>
-
-                        <button
-                          className="remove-button"
-                          onClick={() => handleDeleteMeal(day, mealType, index)}
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))}
-
-                    <button
-                      className="add-button"
-                      onClick={() => openModal(day, mealType)}
-                    >
-                      + Add Meal
-                    </button>
-                  </div>
-                </td>
+              {mealTypes.map((meal) => (
+                <th key={meal}>{meal}</th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
 
+          <tbody>
+            {days.map((day) => (
+              <tr key={day}>
+                <td className="day-cell">
+                  <div className="day-name">{day}</div>
+
+                  {mealPlan[day]?.notes && (
+                    <div className="day-notes">
+                      {mealPlan[day].notes.split("\n").map((line, index) => (
+                        <div key={index}>{line}</div>
+                      ))}
+                    </div>
+                  )}
+
+                  <button
+                    className="notes-button"
+                    onClick={() => handleEditNotes(day)}
+                  >
+                    {mealPlan[day]?.notes ? "Edit Notes" : "+ Notes"}
+                  </button>
+                </td>
+
+                {mealTypes.map((mealType) => (
+                  <td key={mealType}>
+                    <div className="meal-cell">
+                      {mealPlan[day][mealType].map((meal, index) => (
+                        <div key={index} className="meal-chip">
+                          <span>{meal}</span>
+
+                          <button
+                            className="remove-button"
+                            onClick={() =>
+                              handleDeleteMeal(day, mealType, index)
+                            }
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+
+                      <button
+                        className="add-button"
+                        onClick={() => openModal(day, mealType)}
+                      >
+                        + Add Meal
+                      </button>
+                    </div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <div className="grocery-section">
         <h2>🛒 Grocery List</h2>
 
@@ -410,7 +421,30 @@ function App() {
           </div>
         )}
       </div>
+      {isAboutOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>About FoodChart</h2>
 
+            <p>Collaborative weekly meal planning made simple.</p>
+
+            <ul>
+              <li>Weekly meal planner</li>
+              <li>Shared meal planning</li>
+              <li>Day notes and reminders</li>
+              <li>Automatic grocery list generation</li>
+              <li>Recipe library</li>
+              <li>Recipe ingredient management</li>
+              <li>Real-time Firebase synchronization</li>
+              <li>Mobile-friendly experience</li>
+            </ul>
+
+            <div className="modal-buttons">
+              <button onClick={() => setIsAboutOpen(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
       <MealModal
         isOpen={isModalOpen}
         day={selectedDay}

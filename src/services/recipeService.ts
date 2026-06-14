@@ -1,9 +1,11 @@
 import {
   addDoc,
   collection,
+  doc,
   onSnapshot,
   query,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 
 import { db } from "../firebase";
@@ -29,10 +31,17 @@ export function subscribeToRecipes(
       const recipes: Recipe[] =
         snapshot.docs.map((doc) => ({
           id: doc.id,
+
           name: doc.data().name,
+
           normalizedName:
             doc.data()
               .normalizedName,
+
+          isArchived:
+            doc.data()
+              .isArchived ??
+            false,
         }));
 
       recipes.sort((a, b) =>
@@ -40,6 +49,12 @@ export function subscribeToRecipes(
       );
 
       callback(recipes);
+    },
+    (error) => {
+      console.error(
+        "Recipe subscription failed:",
+        error
+      );
     }
   );
 }
@@ -54,9 +69,30 @@ export async function addRecipe(
     recipesCollection,
     {
       name: name.trim(),
+
       normalizedName,
+
+      isArchived: false,
+
       createdAt:
         serverTimestamp(),
+    }
+  );
+}
+
+export async function archiveRecipe(
+  recipeId: string
+) {
+  const recipeRef = doc(
+    db,
+    "recipes",
+    recipeId
+  );
+
+  await updateDoc(
+    recipeRef,
+    {
+      isArchived: true,
     }
   );
 }

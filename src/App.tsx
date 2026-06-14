@@ -35,7 +35,10 @@ import {
   setDoc,
 } from "firebase/firestore";
 
-import { subscribeToRecipes } from "./services/recipeService";
+import {
+  archiveRecipe,
+  subscribeToRecipes,
+} from "./services/recipeService";
 
 function App() {
   const [mealPlan, setMealPlan] =
@@ -45,7 +48,9 @@ function App() {
 
   const [recipes, setRecipes] =
     useState<Recipe[]>([]);
-
+  
+  const [recipeSearchTerm, setRecipeSearchTerm] = useState("");
+  
   const [isModalOpen, setIsModalOpen] =
     useState(false);
 
@@ -205,6 +210,50 @@ function App() {
       },
     }));
   };
+
+  const handleArchiveRecipe =
+  async (recipe: Recipe) => {
+    const confirmed =
+      window.confirm(
+        `Archive "${recipe.name}"?\n\nArchived recipes will disappear from the Recipe Library and meal suggestions. Existing meal plans will remain unchanged.`
+      );
+
+    if (
+      !confirmed ||
+      !recipe.id
+    ) {
+      return;
+    }
+
+    try {
+      await archiveRecipe(
+        recipe.id
+      );
+    } catch (error) {
+      console.error(
+        "Failed to archive recipe:",
+        error
+      );
+
+      window.alert(
+        "Unable to archive recipe."
+      );
+    }
+  };
+
+  const visibleRecipes =
+  recipes
+    .filter(
+      (recipe) =>
+        !recipe.isArchived
+    )
+    .filter((recipe) =>
+      recipe.name
+        .toLowerCase()
+        .includes(
+          recipeSearchTerm.toLowerCase()
+        )
+    );
 
   const groceryList =
     generateGroceryList(
@@ -399,12 +448,66 @@ function App() {
           </>
         )}
       </div>
+      
+      <div className="recipe-library">
+  <h2>
+    📚 Recipe Library
+  </h2>
+
+  <input
+    type="text"
+    placeholder="Search recipes..."
+    value={recipeSearchTerm}
+    onChange={(event) =>
+      setRecipeSearchTerm(
+        event.target.value
+      )
+    }
+    className="recipe-search"
+  />
+
+  {visibleRecipes.length ===
+  0 ? (
+    <p>
+      No recipes found.
+    </p>
+  ) : (
+    <div className="recipe-list">
+      {visibleRecipes.map(
+        (recipe) => (
+          <div
+            key={recipe.id}
+            className="recipe-item"
+          >
+            <span>
+              {recipe.name}
+            </span>
+
+            <button
+              className="archive-button"
+              onClick={() =>
+                handleArchiveRecipe(
+                  recipe
+                )
+              }
+            >
+              Archive
+            </button>
+          </div>
+        )
+      )}
+    </div>
+  )}
+</div>
 
       <MealModal
           isOpen={isModalOpen}
           day={selectedDay}
           mealType={selectedMealType}
-          recipes={recipes}
+          recipes={recipes.filter(
+              (recipe) =>
+              !recipe.isArchived
+          )}
           onClose={closeModal}
           onSave={handleSaveMeal}
 />

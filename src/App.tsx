@@ -2,59 +2,20 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import MealModal from "./components/MealModal";
 
-const days = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-] as const;
+import {
+  days,
+  mealTypes,
+} from "./types/mealPlan";
 
-const mealTypes = ["Breakfast", "Lunch", "Dinner"] as const;
+import type {
+  MealPlan,
+  MealType,
+} from "./types/mealPlan";
 
-type MealType = (typeof mealTypes)[number];
-
-type MealPlan = {
-  [day: string]: {
-    Breakfast: string[];
-    Lunch: string[];
-    Dinner: string[];
-  };
-};
-
-const LOCAL_STORAGE_KEY = "foodchart-meal-plan";
-
-const createEmptyMealPlan = (): MealPlan => {
-  const plan: MealPlan = {};
-
-  days.forEach((day) => {
-    plan[day] = {
-      Breakfast: [],
-      Lunch: [],
-      Dinner: [],
-    };
-  });
-
-  return plan;
-};
-
-const loadMealPlan = (): MealPlan => {
-  const savedMealPlan = localStorage.getItem(
-    LOCAL_STORAGE_KEY
-  );
-
-  if (!savedMealPlan) {
-    return createEmptyMealPlan();
-  }
-
-  try {
-    return JSON.parse(savedMealPlan);
-  } catch {
-    return createEmptyMealPlan();
-  }
-};
+import {
+  loadMealPlan,
+  LOCAL_STORAGE_KEY,
+} from "./utils/mealPlan";
 
 function App() {
   const [mealPlan, setMealPlan] =

@@ -401,22 +401,13 @@ function App() {
       </div>
 
       <MealModal
-        isOpen={
-          isModalOpen
-        }
-        day={
-          selectedDay
-        }
-        mealType={
-          selectedMealType
-        }
-        onClose={
-          closeModal
-        }
-        onSave={
-          handleSaveMeal
-        }
-      />
+          isOpen={isModalOpen}
+          day={selectedDay}
+          mealType={selectedMealType}
+          recipes={recipes}
+          onClose={closeModal}
+          onSave={handleSaveMeal}
+/>
     </div>
   );
 }

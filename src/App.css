@@ -5,8 +5,7 @@
 
   padding: 24px;
 
-  font-family: Arial,
-    sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 h1 {
@@ -78,8 +77,7 @@ p {
 .notes-button {
   background-color: transparent;
 
-  border: 1px solid
-    #4caf50;
+  border: 1px solid #4caf50;
 
   color: #4caf50;
 
@@ -91,13 +89,11 @@ p {
 
   cursor: pointer;
 
-  transition: all 0.2s
-    ease;
+  transition: all 0.2s ease;
 }
 
 .notes-button:hover {
-  background-color:
-    #4caf50;
+  background-color: #4caf50;
 
   color: white;
 }
@@ -113,15 +109,13 @@ p {
 .meal-chip {
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   align-items: center;
 
   padding: 8px 12px;
 
-  background-color:
-    #e8f5e9;
+  background-color: #e8f5e9;
 
   border-radius: 6px;
 
@@ -147,8 +141,7 @@ p {
 
   border-radius: 4px;
 
-  background-color:
-    #4caf50;
+  background-color: #4caf50;
 
   color: white;
 
@@ -164,13 +157,11 @@ p {
 
   inset: 0;
 
-  background-color:
-    rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 
   display: flex;
 
-  justify-content:
-    center;
+  justify-content: center;
 
   align-items: center;
 }
@@ -200,8 +191,7 @@ p {
 .modal-buttons {
   display: flex;
 
-  justify-content:
-    flex-end;
+  justify-content: flex-end;
 
   gap: 10px;
 }
@@ -221,8 +211,7 @@ p {
 
   padding: 24px;
 
-  border: 1px solid
-    #ddd;
+  border: 1px solid #ddd;
 
   border-radius: 8px;
 
@@ -238,11 +227,7 @@ p {
 .grocery-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(180px, 1fr)
-    );
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 
   gap: 12px 24px;
 }
@@ -276,8 +261,7 @@ p {
 
   padding: 24px;
 
-  border: 1px solid
-    #ddd;
+  border: 1px solid #ddd;
 
   border-radius: 8px;
 
@@ -313,20 +297,17 @@ p {
 .recipe-item {
   padding: 16px;
 
-  border: 1px solid
-    #e0e0e0;
+  border: 1px solid #e0e0e0;
 
   border-radius: 8px;
 
-  background-color:
-    #fafafa;
+  background-color: #fafafa;
 }
 
 .recipe-header {
   display: flex;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
   align-items: center;
 
@@ -370,8 +351,7 @@ p {
 
   border-radius: 16px;
 
-  background-color:
-    #e8f5e9;
+  background-color: #e8f5e9;
 }
 
 .ingredient-remove-button {
@@ -401,8 +381,7 @@ p {
 
   border-radius: 4px;
 
-  background-color:
-    #f44336;
+  background-color: #f44336;
 
   color: white;
 
@@ -434,8 +413,7 @@ p {
 
   border-radius: 4px;
 
-  background-color:
-    #4caf50;
+  background-color: #4caf50;
 
   color: white;
 
@@ -451,8 +429,7 @@ p {
 
   display: flex;
 
-  justify-content:
-    flex-end;
+  justify-content: flex-end;
 }
 
 .save-ingredients-button {
@@ -462,8 +439,7 @@ p {
 
   border-radius: 4px;
 
-  background-color:
-    #2196f3;
+  background-color: #2196f3;
 
   color: white;
 
@@ -472,6 +448,31 @@ p {
 
 .save-ingredients-button:hover {
   opacity: 0.9;
+}
+
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.tab-button {
+  padding: 10px 16px;
+  border: 1px solid #4caf50;
+  border-radius: 6px;
+  background-color: white;
+  color: #4caf50;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tab-button:hover {
+  background-color: #f1f8f2;
+}
+
+.tab-button.active {
+  background-color: #4caf50;
+  color: white;
 }
 
 .about-button {
@@ -550,6 +551,14 @@ button {
 @media (max-width: 480px) {
   .container {
     padding: 12px;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tab-button {
+    width: 100%;
   }
 
   .modal {

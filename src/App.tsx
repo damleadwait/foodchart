@@ -1,21 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-
 import "./App.css";
-
 import MealModal from "./components/MealModal";
-
 import { days, mealTypes } from "./types/mealPlan";
-
 import type { MealPlan, MealType } from "./types/mealPlan";
-
 import type { Recipe } from "./types/recipe";
-
 import { createEmptyMealPlan, normalizeMealPlan } from "./utils/mealPlan";
-
 import { generateGroceryList } from "./utils/groceryList";
-
 import { db } from "./firebase";
-
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
 
 import {
@@ -26,6 +17,8 @@ import {
 
 function App() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+
+  const [activeTab, setActiveTab] = useState<"Planner" | "Recipes">("Planner");
 
   const [mealPlan, setMealPlan] = useState<MealPlan>(createEmptyMealPlan());
 
@@ -238,7 +231,21 @@ function App() {
           About
         </button>
       </div>
-
+      <div className="tabs">
+        <button
+          className={`tab-button ${activeTab === "Planner" ? "active" : ""}`}
+          onClick={() => setActiveTab("Planner")}
+        >
+          Planner
+        </button>
+        <button
+          className={`tab-button ${activeTab === "Recipes" ? "active" : ""}`}
+          onClick={() => setActiveTab("Recipes")}
+        >
+          Recipes
+        </button>
+      </div>
+      {activeTab === "Planner" && (<>
       <div className="table-wrapper">
         <table className="meal-table">
           <thead>
@@ -328,7 +335,9 @@ function App() {
           </>
         )}
       </div>
+ </>)}
 
+{activeTab === "Recipes" && (
       <div className="recipe-library">
         <h2>📚 Recipe Library</h2>
 
@@ -421,6 +430,7 @@ function App() {
           </div>
         )}
       </div>
+      )}
       {isAboutOpen && (
         <div className="modal-overlay">
           <div className="modal">

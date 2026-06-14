@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import MealModal from "./components/MealModal";
 
@@ -24,6 +24,8 @@ type MealPlan = {
   };
 };
 
+const LOCAL_STORAGE_KEY = "foodchart-meal-plan";
+
 const createEmptyMealPlan = (): MealPlan => {
   const plan: MealPlan = {};
 
@@ -38,15 +40,41 @@ const createEmptyMealPlan = (): MealPlan => {
   return plan;
 };
 
-function App() {
-  const [mealPlan, setMealPlan] = useState<MealPlan>(
-    createEmptyMealPlan()
+const loadMealPlan = (): MealPlan => {
+  const savedMealPlan = localStorage.getItem(
+    LOCAL_STORAGE_KEY
   );
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDay, setSelectedDay] = useState("");
+  if (!savedMealPlan) {
+    return createEmptyMealPlan();
+  }
+
+  try {
+    return JSON.parse(savedMealPlan);
+  } catch {
+    return createEmptyMealPlan();
+  }
+};
+
+function App() {
+  const [mealPlan, setMealPlan] =
+    useState<MealPlan>(loadMealPlan);
+
+  const [isModalOpen, setIsModalOpen] =
+    useState(false);
+
+  const [selectedDay, setSelectedDay] =
+    useState("");
+
   const [selectedMealType, setSelectedMealType] =
     useState<MealType>("Breakfast");
+
+  useEffect(() => {
+    localStorage.setItem(
+      LOCAL_STORAGE_KEY,
+      JSON.stringify(mealPlan)
+    );
+  }, [mealPlan]);
 
   const openModal = (
     day: string,
@@ -61,7 +89,9 @@ function App() {
     setIsModalOpen(false);
   };
 
-  const handleSaveMeal = (mealName: string) => {
+  const handleSaveMeal = (
+    mealName: string
+  ) => {
     setMealPlan((prev) => ({
       ...prev,
 
@@ -69,7 +99,9 @@ function App() {
         ...prev[selectedDay],
 
         [selectedMealType]: [
-          ...prev[selectedDay][selectedMealType],
+          ...prev[selectedDay][
+            selectedMealType
+          ],
           mealName,
         ],
       },
@@ -87,9 +119,9 @@ function App() {
       [day]: {
         ...prev[day],
 
-        [mealType]: prev[day][mealType].filter(
-          (_, i) => i !== index
-        ),
+        [mealType]: prev[day][
+          mealType
+        ].filter((_, i) => i !== index),
       },
     }));
   };
@@ -114,46 +146,60 @@ function App() {
         <tbody>
           {days.map((day) => (
             <tr key={day}>
-              <td className="day-cell">{day}</td>
+              <td className="day-cell">
+                {day}
+              </td>
 
-              {mealTypes.map((mealType) => (
-                <td key={mealType}>
-                  <div className="meal-cell">
-                    {mealPlan[day][mealType].map(
-                      (meal, index) => (
-                        <div
-                          key={index}
-                          className="meal-chip"
-                        >
-                          <span>{meal}</span>
-
-                          <button
-                            className="remove-button"
-                            onClick={() =>
-                              handleDeleteMeal(
-                                day,
-                                mealType,
-                                index
-                              )
-                            }
+              {mealTypes.map(
+                (mealType) => (
+                  <td key={mealType}>
+                    <div className="meal-cell">
+                      {mealPlan[
+                        day
+                      ][mealType].map(
+                        (
+                          meal,
+                          index
+                        ) => (
+                          <div
+                            key={index}
+                            className="meal-chip"
                           >
-                            ×
-                          </button>
-                        </div>
-                      )
-                    )}
+                            <span>
+                              {meal}
+                            </span>
 
-                    <button
-                      className="add-button"
-                      onClick={() =>
-                        openModal(day, mealType)
-                      }
-                    >
-                      + Add Meal
-                    </button>
-                  </div>
-                </td>
-              ))}
+                            <button
+                              className="remove-button"
+                              onClick={() =>
+                                handleDeleteMeal(
+                                  day,
+                                  mealType,
+                                  index
+                                )
+                              }
+                            >
+                              ×
+                            </button>
+                          </div>
+                        )
+                      )}
+
+                      <button
+                        className="add-button"
+                        onClick={() =>
+                          openModal(
+                            day,
+                            mealType
+                          )
+                        }
+                      >
+                        + Add Meal
+                      </button>
+                    </div>
+                  </td>
+                )
+              )}
             </tr>
           ))}
         </tbody>
